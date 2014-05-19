@@ -54,8 +54,12 @@ final class BoiteAOutils
 		die(header('Location: ' . $S_url));
 	}
 	
-    public static function crypterMotDePasse (Utilisateur $O_utilisateur, $S_motdePasse)
+    public static function crypterMotDePasse (Utilisateur $O_utilisateur, $S_motdePasse, $S_algorithme = 'sha1')
     {
-        return sha1($O_utilisateur->donneLogin() . $S_motdePasse);
+        if (function_exists($S_algorithme)) {
+			return $S_algorithme($O_utilisateur->donneLogin() . $S_motdePasse);
+        }
+
+        throw new BadFunctionCallException("L'algorithme de cryptage demandé n'existe pas ou n'est pas disponible");
     }
 }
