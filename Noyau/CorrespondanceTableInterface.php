@@ -5,8 +5,5 @@
 
 interface CorrespondanceTableInterface
 {
-	public function creer();
     public function trouverParIdentifiant ($I_identifiant);
-	public function actualiser();
-	public function supprimer();
 }

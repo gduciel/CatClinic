@@ -15,6 +15,9 @@ final class ControleurLogin
 		$S_login      = isset($_POST['login']) ? $_POST['login'] : null;
 		$S_motdepasse = isset($_POST['motdepasse']) ? $_POST['motdepasse'] : null;
 
+		// on va mémoriser l'identifiant de l'utilisateur, il n'aura pas à le retaper
+		BoiteAOutils::rangerDansSession('login', $S_login);
+
 		if (null == $S_login) {
 			// On positionne le message d'erreur qui sera affiché
 			$S_erreur = 'L\'identifiant est vide.';
@@ -31,15 +34,11 @@ final class ControleurLogin
 			BoiteAOutils::redirigerVers('login');
 		}
 
-		// On a un couple login/password, on va pouvoir le tester
-		$O_utilisateur = new Utilisateur();
-		$O_utilisateur->changeLogin($S_login);
-		// on va mémoriser l'identifiant de l'utilisateur, il n'aura pas à le retaper
-		BoiteAOutils::rangerDansSession('login', $S_login);
-
 		try
 		{
-			$O_utilisateur->trouver(); // on part quand même du principe qu'un utilisateur a un login unique (on a mis un index UNIQUE sur login) !
+            $O_utilisateurMapper = new UtilisateurMapper;
+            // on part quand même du principe qu'un utilisateur a un login unique (on a mis un index UNIQUE sur login) !
+			$O_utilisateur = $O_utilisateurMapper->trouverParLogin($S_login);
 		} catch (Exception $O_exception)
 		{
 			// On positionne le message d'erreur qui sera affiché

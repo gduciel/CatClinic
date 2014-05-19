@@ -14,6 +14,8 @@ final class Constantes
 
 	const REPERTOIRE_MODELE      = '/Modele/';
 
+	const REPERTOIRE_MAPPERS     = 'DataMappers/';
+
 	const REPERTOIRE_NOYAU       = '/Noyau/';
 
 	const REPERTOIRE_CONTROLEURS = '/Controleurs/';
@@ -33,6 +35,10 @@ final class Constantes
 
 	public static function repertoireModele() {
 		return self::repertoireRacine() . self::REPERTOIRE_MODELE;
+	}
+
+	public static function repertoireMappers() {
+		return self::repertoireModele() . self::REPERTOIRE_MAPPERS;
 	}
 
 	public static function repertoireNoyau() {

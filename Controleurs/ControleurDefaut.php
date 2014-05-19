@@ -22,8 +22,8 @@ final class ControleurDefaut
 					$O_chat = $O_utilisateur->donneProprietaire()->donneChat();
 					$I_identifiantChat = $O_chat->donneIdentifiant();
 
-					$O_visite = new Visite();
-					$A_visites = $O_visite->trouverParIdentifiantChat ($I_identifiantChat);
+					$O_visiteMapper = new VisiteMapper();
+					$A_visites = $O_visiteMapper->trouverParIdentifiantChat ($I_identifiantChat);
 
 					Vue::montrer('visites/liste', array('visites' => $A_visites, 'chat' => $O_chat));
 				} else
@@ -33,7 +33,7 @@ final class ControleurDefaut
 			} else {
 				// un admin doit avoir la liste des utilisateurs du site
 				// je les récupère tous...
-                                $O_listeurUtilisateur = new ListeurUtilisateur();
+                $O_listeurUtilisateur = new ListeurUtilisateur();
 				$A_utilisateurs = $O_listeurUtilisateur->lister();
 				$O_paginateur = new Paginateur($O_listeurUtilisateur);
 

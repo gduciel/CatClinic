@@ -24,7 +24,8 @@ final class ControleurUtilisateur
 			$O_utilisateur = new Utilisateur();
 
 			try {
-				$O_utilisateur->trouverParIdentifiant($I_identifiantUtilisateur);
+				$O_utilisateurMapper = new UtilisateurMapper;
+				$O_utilisateur = $O_utilisateurMapper->trouverParIdentifiant($I_identifiantUtilisateur);
 			} catch (Exception $O_exception)
 			{
 				// L'identifiant passé ne correspond à rien...
@@ -41,11 +42,12 @@ final class ControleurUtilisateur
 	{
 		$I_identifiantUtilisateur = $A_parametres[0];
 		$S_login = $_POST['login'];
+		// TODO: vérifications sur l'input, même si PDO nettoie derrière
 
-		$O_utilisateur = new Utilisateur();
-		$O_utilisateur->changeIdentifiant($I_identifiantUtilisateur);
+		$O_utilisateurMapper = new UtilisateurMapper;
+		$O_utilisateur = $O_utilisateurMapper->trouverParIdentifiant($I_identifiantUtilisateur);
 		$O_utilisateur->changeLogin($S_login);
-		$O_utilisateur->actualiser();
+		$O_utilisateurMapper->actualiser($O_utilisateur);
 
 		// on redirige vers la liste !
 		BoiteAOutils::redirigerVers('utilisateur/paginer');
@@ -54,9 +56,10 @@ final class ControleurUtilisateur
 	public function supprAction($A_parametres)
 	{
 		$I_identifiantUtilisateur = $A_parametres[0];
-		$O_utilisateur = new Utilisateur();
-		$O_utilisateur->changeIdentifiant($I_identifiantUtilisateur);
-		$O_utilisateur->supprimer();
+
+		$O_utilisateurMapper = new UtilisateurMapper;
+		$O_utilisateur = $O_utilisateurMapper->trouverParIdentifiant($I_identifiantUtilisateur);
+		$O_utilisateurMapper->supprimer($O_utilisateur);
 
 		$O_listeur = new ListeurUtilisateur;
 		$O_paginateur = new Paginateur($O_listeur);
