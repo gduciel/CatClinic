@@ -2,13 +2,12 @@
 
 // Cette classe qui gère la connexion est un design pattern Singleton,
 // sans doute le plus décrié de tous !
-// TODO: utiliser des requêtes préparées
 
 class ConnexionMySQL
 {
 	private static $O_instance;
 
-	protected $_connexion; // C'est là que réside ma connexion avec la base via PDO
+	protected $_connexion; // C'est là que réside ma connexion PDO
 
 	private function __construct ($S_nomBase, $S_environnement)
 	{
@@ -46,24 +45,27 @@ class ConnexionMySQL
 		return self::$O_instance;
 	}
 
-	public function projeter ($S_requete)
-	{
-		return $this->_retournerTableau ($this->_connexion->query($S_requete));
+	public function projeter ($S_requete, Array $A_params) {
+		return $this->_retournerTableau ($this->_connexion->prepare($S_requete), $A_params);
 	}
 
-	public function inserer ($S_requete)
+	public function inserer ($S_requete, Array $A_params)
 	{
-		$this->_connexion->exec($S_requete);
+		$O_pdoStatement = $this->_connexion->prepare($S_requete);
+		$O_pdoStatement->execute($A_params);
 		return $this->_connexion->lastInsertId();
 	}
 
-	public function modifier ($S_requete)
+	public function modifier ($S_requete, Array $A_params)
 	{
-		return $this->_connexion->exec($S_requete);
+		$O_pdoStatement = $this->_connexion->prepare($S_requete);
+		return $O_pdoStatement->execute($A_params);
 	}
 
-    private function _retournerTableau (PDOStatement $O_pdoStatement)
+    private function _retournerTableau (PDOStatement $O_pdoStatement, Array $A_params)
     {
+		$O_pdoStatement->execute($A_params);
+
         $A_tuples = array();
 
         if ($O_pdoStatement)

@@ -11,11 +11,12 @@ final class ProprietaireMapper extends CorrespondanceTable implements Correspond
     public function trouverParIdentifiantUtilisateur ($I_identifiant)
 	{
 		$S_requete    = "SELECT id, nom, prenom, id_chat  FROM " . $this->_S_nomTable .
-                        " WHERE id_utilisateur = '$I_identifiant'";
+                        " WHERE id_utilisateur = ?";
+		$A_paramsRequete = array($I_identifiant);
 
 		$O_connexion  = ConnexionMySQL::recupererInstance();
 
-		if ($A_proprietaire = $O_connexion->projeter($S_requete))
+		if ($A_proprietaire = $O_connexion->projeter($S_requete, $A_paramsRequete))
 		{
 			// On sait donc qu'on aura 1 seul enregistrement dans notre tableau
 			$O_proprietaireTemporaire = $A_proprietaire[0];
