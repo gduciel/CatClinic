@@ -42,11 +42,12 @@ final class VisiteMapper extends CorrespondanceTable implements CorrespondanceTa
 	public function trouverParIdentifiantChat ($I_identifiantChat)
 	{
 		$S_requete    = "SELECT id_praticien, id_chat, date, prix, observations FROM " . $this->_S_nomTable .
-                        " WHERE id_chat = $I_identifiantChat"; // on peut renvoyer plusieurs visites pour un chat
+                        " WHERE id_chat = ?"; // on peut renvoyer plusieurs visites pour un chat
+		$A_paramsRequete = array($I_identifiantChat);
 
 		$O_connexion  = ConnexionMySQL::recupererInstance();
 
-		if ($A_visite = $O_connexion->projeter($S_requete))
+		if ($A_visite = $O_connexion->projeter($S_requete, $A_paramsRequete))
 		{
 			$A_visites = null;
 

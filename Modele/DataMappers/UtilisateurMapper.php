@@ -11,11 +11,12 @@ final class UtilisateurMapper extends CorrespondanceTable implements Corresponda
 	public function trouverParIdentifiant ($I_identifiant)
 	{
 		$S_requete    = "SELECT id, login, motdepasse, admin FROM " . $this->_S_nomTable .
-                        " WHERE id = $I_identifiant";
+                        " WHERE id = ?";
+		$A_paramsRequete = array($I_identifiant);
 
 		$O_connexion  = ConnexionMySQL::recupererInstance();
 
-		if ($A_utilisateur = $O_connexion->projeter($S_requete))
+		if ($A_utilisateur = $O_connexion->projeter($S_requete, $A_paramsRequete))
 		{
 			// on sait donc qu'on aura 1 seul enregistrement dans notre tableau au max
             // c'est un objet de type stdClass
@@ -44,11 +45,12 @@ final class UtilisateurMapper extends CorrespondanceTable implements Corresponda
 	public function trouverParLogin ($S_login)
 	{
 		$S_requete = "SELECT id, login, motdepasse, admin FROM " . $this->_S_nomTable .
-                        " WHERE login = '$S_login'";
+                        " WHERE login = ?";
+		$A_paramsRequete = array($S_login);
 
 		$O_connexion = ConnexionMySQL::recupererInstance();
 
-		if ($A_utilisateur = $O_connexion->projeter($S_requete))
+		if ($A_utilisateur = $O_connexion->projeter($S_requete, $A_paramsRequete))
 		{
 			// on sait donc qu'on aura 1 seul enregistrement dans notre tableau, car login est unique
 			$O_utilisateurTemporaire = $A_utilisateur[0];
@@ -98,9 +100,11 @@ final class UtilisateurMapper extends CorrespondanceTable implements Corresponda
 			$S_login = $O_utilisateur->donneLogin();
 			$I_identifiant = $O_utilisateur->donneIdentifiant();
 
-			$S_requete   = "UPDATE " . $this->_S_nomTable . " SET login = '$S_login' WHERE id = " . $I_identifiant;
+			$S_requete   = "UPDATE " . $this->_S_nomTable . " SET login = ? WHERE id = ?";
+			$A_paramsRequete = array($S_login, $I_identifiant);
+
 			$O_connexion = ConnexionMySQL::recupererInstance();
-			$O_connexion->modifier($S_requete);
+			$O_connexion->modifier($S_requete, $A_paramsRequete);
 
 			return true;
 		}
@@ -117,12 +121,13 @@ final class UtilisateurMapper extends CorrespondanceTable implements Corresponda
 		if (!is_null($O_utilisateur->donneIdentifiant()))
 		{
 			// il me faut absolument un identifiant pour faire une suppression
-			$S_requete   = "DELETE FROM " . $this->_S_nomTable . " WHERE id = " . $O_utilisateur->donneIdentifiant();
+			$S_requete   = "DELETE FROM " . $this->_S_nomTable . " WHERE id = ?";
+			$A_paramsRequete = array($O_utilisateur->donneIdentifiant());
 			$O_connexion = ConnexionMySQL::recupererInstance();
 
 			// si modifier echoue elle me renvoie false, si aucun enregistrement n'est supprimé, elle renvoie zéro
 			// attention donc à bien utiliser l'égalité stricte ici !
-			if (false === $O_connexion->modifier($S_requete))
+			if (false === $O_connexion->modifier($S_requete, $A_paramsRequete))
 			{
 				throw new Exception ("Impossible d'effacer l'utilisateur d'identifiant " . $O_utilisateur->donneIdentifiant());
 			}

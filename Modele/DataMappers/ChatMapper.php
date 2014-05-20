@@ -12,10 +12,11 @@ final class ChatMapper extends CorrespondanceTable implements CorrespondanceTabl
 	{
 		if (isset($I_identifiant)) {
 			$S_requete    = "SELECT id, nom, age, tatouage FROM " . $this->_S_nomTable .
-	                        " WHERE id = $I_identifiant";
+	                        " WHERE id = ?";
+			$A_paramsRequete = array($I_identifiant);
 			$O_connexion  = ConnexionMySQL::recupererInstance();
 
-			if ($A_chat = $O_connexion->projeter($S_requete))
+			if ($A_chat = $O_connexion->projeter($S_requete, $A_paramsRequete))
 			{
                 $O_chatTemporaire = $A_chat[0];
 
@@ -55,12 +56,13 @@ final class ChatMapper extends CorrespondanceTable implements CorrespondanceTabl
 		$S_nom = $O_chat->donneNom();
 		$I_age = $O_chat->donneAge();
 
-		$S_requete = "INSERT INTO " . $this->_S_nomTable . " (nom, age, tatouage) VALUES ('$S_nom', $I_age, '$S_tatouage')";
+		$S_requete = "INSERT INTO " . $this->_S_nomTable . " (nom, age, tatouage) VALUES (?, ?, ?)";
+		$A_paramsRequete = array($S_nom, $I_age, $S_tatouage);
 
 		$O_connexion = ConnexionMySQL::recupererInstance();
 
 		// j'insère en table et inserer me renvoie l'identifiant de mon nouvel enregistrement...je le stocke
-		$O_chat->changeIdentifiant($O_connexion->inserer($S_requete));
+		$O_chat->changeIdentifiant($O_connexion->inserer($S_requete, $A_paramsRequete));
 	}
 
 	public function actualiser (Chat $O_chat)
@@ -77,9 +79,11 @@ final class ChatMapper extends CorrespondanceTable implements CorrespondanceTabl
 			$I_age = $O_chat->donneAge();
 			$I_identifiant = $O_chat->donneIdentifiant();
 
-			$S_requete = "UPDATE " . $this->_S_nomTable . " SET nom = '$S_nom', tatouage = '$S_tatouage', age = $I_age WHERE id = " . $I_identifiant;
+			$S_requete = "UPDATE " . $this->_S_nomTable . " SET nom = ?, tatouage = ?, age = ? WHERE id = ?";
+			$A_paramsRequete = array($S_nom, $S_tatouage, $I_age, $I_identifiant);
+
 			$O_connexion = ConnexionMySQL::recupererInstance();
-			$O_connexion->modifier($S_requete);
+			$O_connexion->modifier($S_requete, $A_paramsRequete);
 
 			return true;
 		}
@@ -92,12 +96,13 @@ final class ChatMapper extends CorrespondanceTable implements CorrespondanceTabl
 		if (null != $O_chat->donneIdentifiant())
 		{
 			// il me faut absolument un identifiant pour faire une suppression
-			$S_requete   = "DELETE FROM " . $this->_S_nomTable . " WHERE id = " . $O_chat->donneIdentifiant();
+			$S_requete   = "DELETE FROM " . $this->_S_nomTable . " WHERE id = ?";
+			$A_paramsRequete = array($O_chat->donneIdentifiant());
 			$O_connexion = ConnexionMySQL::recupererInstance();
 
 			// si modifier echoue elle me renvoie false, si aucun enregistrement n'est supprimé, elle renvoie zéro
 			// attention donc à bien utiliser l'égalité stricte ici !
-			if (false === $O_connexion->modifier($S_requete))
+			if (false === $O_connexion->modifier($S_requete, $A_paramsRequete))
 			{
 				throw new Exception ("Impossible d'effacer le chat d'identifiant " . $O_chat->donneIdentifiant());
 			}
