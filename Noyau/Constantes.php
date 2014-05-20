@@ -51,22 +51,17 @@ final class Constantes
 
 	// Les constantes relatives aux sources de données
 
-	// Pour la base de données relationnelle
-	const DATABASE_HOST = 'localhost';
+	const DEFAULT_DATABASE_NAME = 'catclinic';
 
-	const DATABASE_USER = 'root';
+	const DATABASE_CONFIG_FILE = 'Configuration/basededonnees.ini';
 
-	const DATABASE_PWD  = 'abcd';
+	const TABLE_USER = 'utilisateur';
 
-	const DATABASE_NAME = 'catclinic';
-
-	const TABLE_USER   = 'utilisateur';
-
-	const TABLE_CHAT   = 'chat';
+	const TABLE_CHAT = 'chat';
 
 	const TABLE_PROPRIETAIRE = 'proprietaire';
 
-	const TABLE_VISITE       = 'visite';
+	const TABLE_VISITE = 'visite';
 
 	// divers
 

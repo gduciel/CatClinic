@@ -1,35 +1,46 @@
 <?php
 
-// Cette classe qui gère la connexion
-// avec la base de donnée MySQL ne gère pas les injections SQL potentielles
-// L'idéal serait d'utiliser des requêtes préparées
-// Ce n'est pas fait pour garder tout ça le plus simple possible !
+// Cette classe qui gère la connexion est un design pattern Singleton,
+// sans doute le plus décrié de tous !
+// TODO: utiliser des requêtes préparées
 
 class ConnexionMySQL
 {
 	private static $O_instance;
 
-	protected $_connection; // C'est là que réside ma connexion avec la base via PDO
+	protected $_connexion; // C'est là que réside ma connexion avec la base via PDO
 
-	private function __construct ($S_nomBase)
+	private function __construct ($S_nomBase, $S_environnement)
 	{
-		// Les tables utilisent une collation latin1 et les pages xhtml
-        // affichent de l'UTF8...je dis à MySQL que durant la connexion,
-        // j'exige qu'on me donne de l'UTF8 (regardez le dernier paramètre du constructeur)
-		$this->_connection = new PDO('mysql:host=' . Constantes::DATABASE_HOST . 
-                                     ';dbname=' . Constantes::DATABASE_NAME,
-                                     Constantes::DATABASE_USER,
-                                     Constantes::DATABASE_PWD,
-									 array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
+		$A_params = parse_ini_file(Constantes::DATABASE_CONFIG_FILE, true);
 
-		$this->_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		if (!$A_params) { // parse_ini_file renvoie false en cas de paramètres érronnés
+			throw new BaseDeDonneesException('Connexion impossible : les paramètres sont incorrects');
+		}
+
+		if ($A_params[$S_environnement]) {
+			// j'écrase le tableau complet avec celui qui m'interesse
+			$A_params = $A_params[$S_environnement];
+			// j'exige qu'on me donne de l'UTF8 (regardez le dernier paramètre du constructeur PDO)
+			$this->_connexion = new PDO('mysql:host=' . $A_params['serveur'] . 
+						';dbname=' . $A_params['basededonnees'],
+						$A_params['utilisateur'],
+						$A_params['motdepasse'],
+						array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
+
+			$this->_connexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+			return;
+		}
+
+		throw new BaseDeDonneesException('Les paramètres pour l\'environnement "' . $S_environnement . '" n\'existent pas !');
 	}
 
-	static public function recupererInstance($S_nomBase = 'catclinic') // par défaut je travaille sur catclinic
+	static public function recupererInstance($S_nomBase = Constantes::DEFAULT_DATABASE_NAME, $S_environnement = 'dev')
 	{
 		if (!self::$O_instance instanceof self)
 		{
-			self::$O_instance = new self ($S_nomBase);
+			self::$O_instance = new self ($S_nomBase, $S_environnement);
 		}
 
 		return self::$O_instance;
@@ -37,18 +48,18 @@ class ConnexionMySQL
 
 	public function projeter ($S_requete)
 	{
-		return $this->_retournerTableau ($this->_connection->query($S_requete));
+		return $this->_retournerTableau ($this->_connexion->query($S_requete));
 	}
 
 	public function inserer ($S_requete)
 	{
-		$this->_connection->exec($S_requete);
-		return $this->_connection->lastInsertId();
+		$this->_connexion->exec($S_requete);
+		return $this->_connexion->lastInsertId();
 	}
 
 	public function modifier ($S_requete)
 	{
-		return $this->_connection->exec($S_requete);
+		return $this->_connexion->exec($S_requete);
 	}
 
     private function _retournerTableau (PDOStatement $O_pdoStatement)
