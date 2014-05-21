@@ -45,7 +45,7 @@ class ConnexionMySQL
 		return self::$O_instance;
 	}
 
-	public function projeter ($S_requete, Array $A_params) {
+	public function projeter ($S_requete, Array $A_params = null) {
 		return $this->_retournerTableau ($this->_connexion->prepare($S_requete), $A_params);
 	}
 
@@ -62,7 +62,7 @@ class ConnexionMySQL
 		return $O_pdoStatement->execute($A_params);
 	}
 
-    private function _retournerTableau (PDOStatement $O_pdoStatement, Array $A_params)
+    private function _retournerTableau (PDOStatement $O_pdoStatement, Array $A_params = null)
     {
 		$O_pdoStatement->execute($A_params);
 
