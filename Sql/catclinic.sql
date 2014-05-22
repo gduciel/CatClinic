@@ -1,4 +1,4 @@
-create database if not exists catclinic;
+create database if not exists catclinic default character set utf8 collate utf8_general_ci;
 
 use catclinic;
 
@@ -8,14 +8,14 @@ create table if not exists chat(
     age tinyint unsigned not null,
     tatouage varchar(10) not null,
     primary key(id)
-);
+) Engine= InnoDB;
 
 create table if not exists praticien(
     id smallint unsigned not null auto_increment,
     nom varchar(30) not null,
     prenom varchar(30) not null,
     primary key(id)
-);
+) Engine= InnoDB;
 
 create table if not exists utilisateur(
     id smallint unsigned not null auto_increment,
@@ -23,7 +23,7 @@ create table if not exists utilisateur(
     motdepasse char(40) not null,
     admin tinyint unsigned not null default 0,
     primary key(id)
-);
+) Engine= InnoDB;
 
 alter table utilisateur add unique (login);
 
@@ -34,7 +34,7 @@ create table if not exists proprietaire(
     id_utilisateur smallint unsigned,
     id_chat smallint unsigned, 
     primary key(id)
-);
+) Engine= InnoDB;
 
 alter table proprietaire add constraint FK_propr_chat foreign key (id_chat) references chat(id);
 alter table proprietaire add constraint FK_propr_user foreign key (id_utilisateur) references utilisateur(id) ON DELETE CASCADE;
@@ -48,7 +48,7 @@ create table if not exists visite(
     prix float(6,2) unsigned not null,
     observations tinytext,
     primary key(id)
-);
+) Engine= InnoDB;
 
 alter table visite add constraint FK_visite_chat foreign key (id_chat) references chat(id);
 alter table visite add constraint FK_visite_prat foreign key (id_praticien) references praticien(id);
