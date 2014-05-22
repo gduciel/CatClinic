@@ -9,6 +9,6 @@ class ListeurUtilisateur extends Listeur implements ListeurInterface
     }
 
     public function lister ($I_debut = null, $I_fin = null)
-	{
-	}
+    {
+    }
 }

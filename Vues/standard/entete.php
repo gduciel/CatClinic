@@ -2,9 +2,7 @@
 
 if (Authentification::estConnecte())
 {
-    $A_liens = array('/'                => 'Accueil', 
-
-				);
+    $A_liens = array('/' => 'Accueil');
     
     if (Authentification::estAdministrateur()) {
         $A_liens['/utilisateur/liste'] = 'Utilisateurs';
@@ -20,5 +18,5 @@ if (Authentification::estConnecte())
 
     echo '</ul>';
 
-	echo '<div class="message">' . 'Vous êtes connecté(e) en tant que ' . '<strong>' . BoiteAOutils::recupererDepuisSession('utilisateur')->donneLogin() . '</strong></div>';
+    echo '<div class="message">' . 'Vous êtes connecté(e) en tant que ' . '<strong>' . BoiteAOutils::recupererDepuisSession('utilisateur')->donneLogin() . '</strong></div>';
 }

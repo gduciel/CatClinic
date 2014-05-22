@@ -1,8 +1,8 @@
 body {
     font: 14px tahoma, verdana, sans-serif;
-	padding: 0;
-	margin: 0;
-	background-color: #f9f9f9;
+    padding: 0;
+    margin: 0;
+    background-color: #f9f9f9;
 }
 table {
     border-collapse: collapse;
@@ -36,32 +36,32 @@ form div.row {
 label {
     display: block;
     float: left;
-	width: 150px;
-	font-weight: bold;
-	text-align: right;
-	margin: 0 0 5px;
-	padding: 3px 5px;
+    width: 150px;
+    font-weight: bold;
+    text-align: right;
+    margin: 0 0 5px;
+    padding: 3px 5px;
 }
 input {
-	border: 1px solid #ccc;
-	padding: 1px 3px;
-	width: 200px;
-	float: left;
+    border: 1px solid #ccc;
+    padding: 1px 3px;
+    width: 200px;
+    float: left;
 }
 select {
     float: left;
     margin-right: 2px;
 }
 input:focus, select:focus {
-	background-color: #f9f9f9;
+    background-color: #f9f9f9;
 }
 input.submitbutton {
-	border: 2px solid #333;
-	background-color: #369;
-	color: #fff;
-	cursor: pointer;
-	font-weight: bold;
-	width: auto;
+    border: 2px solid #333;
+    background-color: #369;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    width: auto;
 }
 input.radio {
     width: auto;
@@ -72,11 +72,11 @@ input.radio {
     margin-right: 10px;
 }
 .error {
-	color: #f00;
+    color: #f00;
 }
 #header {
     border-bottom: 1px solid #ccc;
-	overflow:hidden;
+    overflow:hidden;
 }
 #footer {
     text-align: center;
@@ -97,7 +97,7 @@ input.radio {
 }
 #header .message {
     color: #eee;
-	float: right;
+    float: right;
 }
 #header a, #header a:visited, #footer a, #footer a:visited {
     color: #eee;
