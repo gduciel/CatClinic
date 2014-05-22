@@ -14,12 +14,12 @@ Vue::ouvrirTampon(); // on ouvre le tampon d'affichage, les contrôleurs qui app
 
 try
 {
-	$O_controleur = new Controleur($S_urlADecortiquer);
+    $O_controleur = new Controleur($S_urlADecortiquer);
     $O_controleur->executer();
 }
 catch (ControleurException $O_exception)
 {
-	echo ('Une erreur s\'est produite : ' . $O_exception->getMessage());
+    echo ('Une erreur s\'est produite : ' . $O_exception->getMessage());
 }
 
 // Les différentes sous-vues ont été "crachées" dans le tampon d'affichage, on les récupère
