@@ -6,10 +6,10 @@ final class ControleurUtilisateur
 {
     public function listeAction()
     {
-        $this->paginerAction(null);
+        $this->paginerAction();
     }
 
-    public function editAction($A_parametres)
+    public function editAction(Array $A_parametres)
     {
         $I_identifiantUtilisateur = $A_parametres[0];
 
@@ -38,7 +38,7 @@ final class ControleurUtilisateur
         }
     }
 
-    public function miseajourAction($A_parametres)
+    public function miseajourAction(Array $A_parametres)
     {
         $I_identifiantUtilisateur = $A_parametres[0];
         $S_login = $_POST['login'];
@@ -53,7 +53,7 @@ final class ControleurUtilisateur
         BoiteAOutils::redirigerVers('utilisateur/paginer');
     }
 
-    public function supprAction($A_parametres)
+    public function supprAction(Array $A_parametres)
     {
         $I_identifiantUtilisateur = $A_parametres[0];
 
@@ -92,7 +92,7 @@ final class ControleurUtilisateur
         Vue::montrer ('utilisateur/liste', array('utilisateurs' => $A_utilisateurs, 'pagination' => $A_pagination));
     }
 
-    public function paginerAction($A_parametres)
+    public function paginerAction(Array $A_parametres = null)
     {
         $I_page = isset($A_parametres[0]) ? $A_parametres[0] : 1;
         $O_listeur = new ListeurUtilisateur;
