@@ -12,14 +12,14 @@
 
 if (count($A_vue['utilisateurs']))
 {
-    echo '  <tbody>';
+    echo '<tbody>';
 
     foreach ($A_vue['utilisateurs'] as $O_utilisateur)
     {
         // Allez, on ressort echo, print...
         print '<tr>';
-        echo '<td>'. $O_utilisateur->donneIdentifiant()                   . '</td><td>' . 
-                        $O_utilisateur->donneLogin()                         . '</td><td>' .
+        echo '<td>'. $O_utilisateur->donneIdentifiant() . '</td><td>' . 
+                     $O_utilisateur->donneLogin() . '</td><td>' .
                     ($O_utilisateur->estAdministrateur() ? 'oui' : 'non') . '</td>';
         print '<td><a href="/utilisateur/suppr/' . $O_utilisateur->donneIdentifiant() .
             '" onclick="return(confirm(\'Etes-vous sûr de vouloir supprimer cet utilisateur ?\'));">
@@ -35,9 +35,9 @@ if (count($A_vue['utilisateurs']))
     if (isset($A_vue['pagination']))
     {
         echo '<div style="">';
-        foreach ($A_vue['pagination'] as $S_lien)
+        foreach ($A_vue['pagination'] as $I_numeroPage => $S_lien)
         {
-            echo '&nbsp;' . $S_lien;
+            echo '&nbsp;' . ($S_lien ? '<a href="' . $S_lien . '">' . $I_numeroPage . '</a>' : $I_numeroPage);
         }
         echo '</div>';
     }
