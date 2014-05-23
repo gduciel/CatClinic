@@ -22,7 +22,7 @@ final class ControleurDefaut
                     $O_chat = $O_utilisateur->donneProprietaire()->donneChat();
                     $I_identifiantChat = $O_chat->donneIdentifiant();
 
-                    $O_visiteMapper = new VisiteMapper();
+                    $O_visiteMapper = FabriqueDeMappers::fabriquer('visite');
                     $A_visites = $O_visiteMapper->trouverParIdentifiantChat ($I_identifiantChat);
 
                     Vue::montrer('visites/liste', array('visites' => $A_visites, 'chat' => $O_chat));
