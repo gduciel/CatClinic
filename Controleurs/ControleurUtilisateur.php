@@ -24,7 +24,7 @@ final class ControleurUtilisateur
             $O_utilisateur = new Utilisateur();
 
             try {
-                $O_utilisateurMapper = new UtilisateurMapper;
+                $O_utilisateurMapper = FabriqueDeMappers::fabriquer('utilisateur');
                 $O_utilisateur = $O_utilisateurMapper->trouverParIdentifiant($I_identifiantUtilisateur);
             } catch (Exception $O_exception)
             {
@@ -44,7 +44,7 @@ final class ControleurUtilisateur
         $S_login = $_POST['login'];
         // TODO: vérifications sur l'input, même si PDO nettoie derrière
 
-        $O_utilisateurMapper = new UtilisateurMapper;
+        $O_utilisateurMapper = FabriqueDeMappers::fabriquer('utilisateur');
         $O_utilisateur = $O_utilisateurMapper->trouverParIdentifiant($I_identifiantUtilisateur);
         $O_utilisateur->changeLogin($S_login);
         $O_utilisateurMapper->actualiser($O_utilisateur);
@@ -57,7 +57,7 @@ final class ControleurUtilisateur
     {
         $I_identifiantUtilisateur = $A_parametres[0];
 
-        $O_utilisateurMapper = new UtilisateurMapper;
+        $O_utilisateurMapper = FabriqueDeMappers::fabriquer('utilisateur');
         $O_utilisateur = $O_utilisateurMapper->trouverParIdentifiant($I_identifiantUtilisateur);
         $O_utilisateurMapper->supprimer($O_utilisateur);
 
