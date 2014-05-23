@@ -16,6 +16,8 @@ final class Constantes
 
     const REPERTOIRE_MAPPERS     = 'DataMappers/';
 
+    const REPERTOIRE_MAPPERS_SQL = 'Sql/';
+
     const REPERTOIRE_NOYAU       = '/Noyau/';
 
     const REPERTOIRE_CONTROLEURS = '/Controleurs/';
@@ -39,6 +41,10 @@ final class Constantes
 
     public static function repertoireMappers() {
         return self::repertoireModele() . self::REPERTOIRE_MAPPERS;
+    }
+
+    public static function repertoireMappersSql() {
+        return self::repertoireMappers() . self::REPERTOIRE_MAPPERS_SQL;
     }
 
     public static function repertoireNoyau() {
@@ -65,5 +71,5 @@ final class Constantes
 
     // divers
 
-    const NB_MAX_UTILISATEURS_PAR_PAGE = 10;
+    const NB_MAX_UTILISATEURS_PAR_PAGE = 1;
 }
