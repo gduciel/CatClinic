@@ -34,10 +34,10 @@ if (count($A_vue['utilisateurs']))
 <?php
     if (isset($A_vue['pagination']))
     {
-        echo '<div style="">';
+        echo '<div>';
         foreach ($A_vue['pagination'] as $I_numeroPage => $S_lien)
         {
-            echo '&nbsp;' . ($S_lien ? '<a href="' . $S_lien . '">' . $I_numeroPage . '</a>' : $I_numeroPage);
+            echo '&nbsp;' . ($S_lien ? '<a href="/' . $S_lien . '">' . $I_numeroPage . '</a>' : $I_numeroPage);
         }
         echo '</div>';
     }
