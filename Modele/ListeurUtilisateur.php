@@ -4,7 +4,8 @@
 
 class ListeurUtilisateur extends Listeur implements ListeurInterface
 {
-    public function __construct() {
+    public function __construct(Connexion $O_connexion) {
+        parent::__construct($O_connexion);
         $this->_S_nomTable = Constantes::TABLE_USER;
     }
 

@@ -2,10 +2,11 @@
 
 final class UtilisateurMapper extends CorrespondanceTable implements CorrespondanceTableInterface
 {
-    public function __construct()
+    public function __construct(Connexion $O_connexion)
     {
         parent::__construct(Constantes::TABLE_USER);
         $this->_S_classeMappee = 'Utilisateur';
+        $this->_O_connexion = $O_connexion;
     }
 
     public function trouverParIdentifiant ($I_identifiant)
@@ -14,9 +15,7 @@ final class UtilisateurMapper extends CorrespondanceTable implements Corresponda
                         " WHERE id = ?";
         $A_paramsRequete = array($I_identifiant);
 
-        $O_connexion  = ConnexionMySQL::recupererInstance();
-
-        if ($A_utilisateur = $O_connexion->projeter($S_requete, $A_paramsRequete))
+        if ($A_utilisateur = $this->_O_connexion->projeter($S_requete, $A_paramsRequete))
         {
             // on sait donc qu'on aura 1 seul enregistrement dans notre tableau au max
             // c'est un objet de type stdClass
@@ -44,13 +43,10 @@ final class UtilisateurMapper extends CorrespondanceTable implements Corresponda
 
     public function trouverParLogin ($S_login)
     {
-        $S_requete = "SELECT id, login, motdepasse, admin FROM " . $this->_S_nomTable .
-                        " WHERE login = ?";
+        $S_requete = "SELECT id, login, motdepasse, admin FROM " . $this->_S_nomTable . " WHERE login = ?";
         $A_paramsRequete = array($S_login);
 
-        $O_connexion = ConnexionMySQL::recupererInstance();
-
-        if ($A_utilisateur = $O_connexion->projeter($S_requete, $A_paramsRequete))
+        if ($A_utilisateur = $this->_O_connexion->projeter($S_requete, $A_paramsRequete))
         {
             // on sait donc qu'on aura 1 seul enregistrement dans notre tableau, car login est unique
             $O_utilisateurTemporaire = $A_utilisateur[0];
@@ -71,7 +67,7 @@ final class UtilisateurMapper extends CorrespondanceTable implements Corresponda
                 // Un utilisateur n'est pas forcément un propriétaire, mais s'il l'est
                 // il faut récupérer ses données de propriétaire !
                 try {
-                    $O_proprietaireMapper = new ProprietaireMapper();
+                    $O_proprietaireMapper = FabriqueDeMappers::fabriquer('proprietaire', $this->_O_connexion);
                     $O_proprietaire = $O_proprietaireMapper->trouverParIdentifiantUtilisateur ($O_utilisateur->donneIdentifiant());
                 } catch (Exception $O_exception) {
                     $O_proprietaire = null;
@@ -103,8 +99,7 @@ final class UtilisateurMapper extends CorrespondanceTable implements Corresponda
             $S_requete   = "UPDATE " . $this->_S_nomTable . " SET login = ? WHERE id = ?";
             $A_paramsRequete = array($S_login, $I_identifiant);
 
-            $O_connexion = ConnexionMySQL::recupererInstance();
-            $O_connexion->modifier($S_requete, $A_paramsRequete);
+            $this->_O_connexion->modifier($S_requete, $A_paramsRequete);
 
             return true;
         }
@@ -123,11 +118,10 @@ final class UtilisateurMapper extends CorrespondanceTable implements Corresponda
             // il me faut absolument un identifiant pour faire une suppression
             $S_requete   = "DELETE FROM " . $this->_S_nomTable . " WHERE id = ?";
             $A_paramsRequete = array($O_utilisateur->donneIdentifiant());
-            $O_connexion = ConnexionMySQL::recupererInstance();
 
             // si modifier echoue elle me renvoie false, si aucun enregistrement n'est supprimé, elle renvoie zéro
             // attention donc à bien utiliser l'égalité stricte ici !
-            if (false === $O_connexion->modifier($S_requete, $A_paramsRequete))
+            if (false === $this->_O_connexion->modifier($S_requete, $A_paramsRequete))
             {
                 throw new Exception ("Impossible d'effacer l'utilisateur d'identifiant " . $O_utilisateur->donneIdentifiant());
             }
