@@ -45,9 +45,11 @@ final class ControleurUtilisateur
 
         $O_utilisateurMapper = FabriqueDeMappers::fabriquer('utilisateur', Connexion::recupererInstance());
         $O_utilisateur = $O_utilisateurMapper->trouverParIdentifiant($I_identifiantUtilisateur);
-        $O_utilisateur->changeLogin($S_login);
-        $O_utilisateurMapper->actualiser($O_utilisateur);
 
+        if ($S_login != $O_utilisateur->donneLogin()) {
+            $O_utilisateur->changeLogin($S_login);
+            $O_utilisateurMapper->actualiser($O_utilisateur);
+        }
         // on redirige vers la liste !
         BoiteAOutils::redirigerVers('utilisateur/paginer');
     }
