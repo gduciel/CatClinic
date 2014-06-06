@@ -2,10 +2,11 @@
 
 final class ProprietaireMapper extends CorrespondanceTable implements CorrespondanceTableInterface
 {
-    public function __construct()
+    public function __construct(Connexion $O_connexion)
     {
         parent::__construct(Constantes::TABLE_PROPRIETAIRE);
         $this->_S_classeMappee = 'Proprietaire';
+        $this->_O_connexion = $O_connexion;
     }
 
     public function trouverParIdentifiantUtilisateur ($I_identifiant)
@@ -14,9 +15,7 @@ final class ProprietaireMapper extends CorrespondanceTable implements Correspond
                         " WHERE id_utilisateur = ?";
         $A_paramsRequete = array($I_identifiant);
 
-        $O_connexion  = ConnexionMySQL::recupererInstance();
-
-        if ($A_proprietaire = $O_connexion->projeter($S_requete, $A_paramsRequete))
+        if ($A_proprietaire = $this->_O_connexion->projeter($S_requete, $A_paramsRequete))
         {
             // On sait donc qu'on aura 1 seul enregistrement dans notre tableau
             $O_proprietaireTemporaire = $A_proprietaire[0];
@@ -36,7 +35,7 @@ final class ProprietaireMapper extends CorrespondanceTable implements Correspond
             // je cherche le chat relié à ce propriétaire
 
             if ($O_proprietaireTemporaire->id_chat) {
-                $O_chatMapper = new ChatMapper();
+                $O_chatMapper = FabriqueDeMappers::fabriquer('chat', $this->_O_connexion);
                 $O_chat = $O_chatMapper->trouverParIdentifiant((integer)$O_proprietaireTemporaire->id_chat);
                 $O_proprietaire->changeChat($O_chat);
             }

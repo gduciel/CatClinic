@@ -2,10 +2,11 @@
 
 final class VisiteMapper extends CorrespondanceTable implements CorrespondanceTableInterface
 {
-    public function __construct()
+    public function __construct(Connexion $O_connexion)
     {
         parent::__construct(Constantes::TABLE_VISITE);
         $this->_S_classeMappee = 'Visite';
+        $this->_O_connexion = $O_connexion;
     }
 
     public function trouverParIdentifiant ($I_identifiant)
@@ -13,9 +14,7 @@ final class VisiteMapper extends CorrespondanceTable implements CorrespondanceTa
         $S_requete    = "SELECT id, id_praticien, id_chat, date, prix, observations FROM " . $this->_S_nomTable .
                         " WHERE id = $I_identifiant";
 
-        $O_connexion  = ConnexionMySQL::recupererInstance();
-
-        if ($A_visite = $O_connexion->projeter($S_requete))
+        if ($A_visite = $this->_O_connexion->projeter($S_requete))
         {
             $O_visiteTemporaire = $A_visite[0];
 
@@ -45,9 +44,7 @@ final class VisiteMapper extends CorrespondanceTable implements CorrespondanceTa
                         " WHERE id_chat = ?"; // on peut renvoyer plusieurs visites pour un chat
         $A_paramsRequete = array($I_identifiantChat);
 
-        $O_connexion  = ConnexionMySQL::recupererInstance();
-
-        if ($A_visite = $O_connexion->projeter($S_requete, $A_paramsRequete))
+        if ($A_visite = $this->_O_connexion->projeter($S_requete, $A_paramsRequete))
         {
             $A_visites = null;
 

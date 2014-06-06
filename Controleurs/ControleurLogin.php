@@ -36,19 +36,19 @@ final class ControleurLogin
 
         try
         {
-            $O_utilisateurMapper = FabriqueDeMappers::fabriquer('utilisateur');
+            $O_utilisateurMapper = FabriqueDeMappers::fabriquer('utilisateur', Connexion::recupererInstance());
             // on part quand même du principe qu'un utilisateur a un login unique (on a mis un index UNIQUE sur login) !
             $O_utilisateur = $O_utilisateurMapper->trouverParLogin($S_login);
+        } catch (InvalidArgumentException $O_exception)
+        {
+            BoiteAOutils::stockerErreur('Une erreur s\'est produite, l\'utilisateur n\'a pas pu être trouvé');
+            BoiteAOutils::redirigerVers('login');   
         } catch (Exception $O_exception)
         {
             // On positionne le message d'erreur qui sera affiché
             BoiteAOutils::stockerErreur($O_exception->getMessage());
             BoiteAOutils::redirigerVers('login');
-        } catch (InvalidArgumentException $O_exception)
-        {
-            BoiteAOutils::stockerErreur('Une erreur s\'est produite, l\'utilisateur n\'a pas pu être trouvé');
-            BoiteAOutils::redirigerVers('login');   
-        }
+        } 
 
         // On a trouvé un utilisateur qui a l'identifiant passé, il faut vérifier son mot de passe 
         if (Authentification::authentifier($O_utilisateur, $S_motdepasse))
