@@ -1,3 +1,5 @@
+<?php
+
 final class Paginateur implements PaginateurInterface {
 
     private $_O_listeur;
