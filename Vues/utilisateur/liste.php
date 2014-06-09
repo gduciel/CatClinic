@@ -21,9 +21,17 @@ if (count($A_vue['utilisateurs']))
         echo '<td>'. $O_utilisateur->donneIdentifiant() . '</td><td>' . 
                      $O_utilisateur->donneLogin() . '</td><td>' .
                     ($O_utilisateur->estAdministrateur() ? 'oui' : 'non') . '</td>';
-        print '<td><a href="/utilisateur/suppr/' . $O_utilisateur->donneIdentifiant() .
-            '" onclick="return(confirm(\'Etes-vous sûr de vouloir supprimer cet utilisateur ?\'));">
-            Effacer</a></td><td><a href="/utilisateur/edit/' . $O_utilisateur->donneIdentifiant() . '">Modifier</a></td>';
+
+        $O_utilisateurCourant = BoiteAOutils::recupererDepuisSession('utilisateur');
+
+        if ($O_utilisateur->donneLogin() != $O_utilisateurCourant->donneLogin()) {
+            // On ne peut pas s'auto-supprimer ni même se modifier alors qu'on est connecté !
+            print '<td><a href="/utilisateur/suppr/' . $O_utilisateur->donneIdentifiant() .
+                '" onclick="return(confirm(\'Etes-vous sûr de vouloir supprimer cet utilisateur ?\'));">
+                Effacer</a></td>';
+            echo '<td><a href="/utilisateur/edit/' . $O_utilisateur->donneIdentifiant() . '">Modifier</a></td>';
+        }
+
         echo '</tr>';
     }
 
