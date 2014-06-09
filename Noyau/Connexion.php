@@ -9,6 +9,10 @@ class Connexion
 
     protected $_O_connexion; // C'est là que réside ma connexion PDO
 
+    const PARAM_ENTIER = PDO::PARAM_INT;
+
+    const PARAM_CARAC = PDO::PARAM_STR;
+
     private function __construct ($S_nomBase, $S_environnement)
     {
         $A_params = parse_ini_file(Constantes::DATABASE_CONFIG_FILE, true);
@@ -52,7 +56,8 @@ class Connexion
     public function inserer ($S_requete, Array $A_params)
     {
         $O_pdoStatement = $this->_O_connexion->prepare($S_requete);
-        $O_pdoStatement->execute($A_params);
+        $this->_lierParametres($O_pdoStatement, $A_params);
+        $O_pdoStatement->execute();
         return $this->_O_connexion->lastInsertId();
     }
 
@@ -64,7 +69,8 @@ class Connexion
 
     private function _retournerTableau (PDOStatement $O_pdoStatement, Array $A_params = null)
     {
-        $O_pdoStatement->execute($A_params);
+        $this->_lierParametres($O_pdoStatement, $A_params);
+        $O_pdoStatement->execute();
         $A_tuples = array();
 
         if ($O_pdoStatement)
@@ -76,5 +82,33 @@ class Connexion
         }
 
         return $A_tuples;
+    }
+
+    private function _lierParametres (PDOStatement $O_pdoStatement, Array $A_params = null)
+    {
+        if (is_array($A_params))
+        {
+            foreach ($A_params as $M_cle => $M_param)
+            {
+                /*
+                    si la clé $M_cle est un entier on lui ajoute 1
+                    car le premier indice du tableau est à l'indice 0
+                    tandis que le premier placeholder est à la position 1
+                    sinon on ne la modifie pas
+                */
+                $M_cle = (is_integer($M_cle) ? ($M_cle + 1) : $M_cle);
+
+                if (is_array($M_param))
+                {
+                    $M_valeur = $M_param[0];
+                    $I_typeDeDonnee = $M_param[1];
+                    $O_pdoStatement->bindValue($M_cle, $M_valeur, $I_typeDeDonnee);
+                }
+                else
+                {
+                    $O_pdoStatement->bindValue($M_cle, $M_param);
+                }
+            }
+        }
     }
 }
