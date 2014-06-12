@@ -21,7 +21,7 @@ class ListeurUtilisateur extends Listeur implements ListeurInterface
      }
      
      //mes getter pour retourner les $I_debut et $I_fin
-         public function donnrDebut($debut)
+         public function donneDebut($debut)
      {
          return $this->I_debut;
      }
