@@ -9,20 +9,17 @@ class ListeurUtilisateur extends Listeur implements ListeurInterface
         $this->_S_nomTable = Constantes::TABLE_USER;
     }
 
+    //mes "setteurs" pour modifier les $I_debut et $I_fin
+    public function changeDebut($debut)
+     {
+         $this->$I_debut =  $debut;
+     }
     public function lister ($I_debut = null, $I_fin = null)
     {
     
     }
     
     
-    public function recupererNbEnregistrements()
-    {
-        
-    }
-    
-    public function recupererCible()
-    {
-        
-    }
+
 }
 ?>
