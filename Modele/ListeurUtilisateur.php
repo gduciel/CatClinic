@@ -14,6 +14,23 @@ class ListeurUtilisateur extends Listeur implements ListeurInterface
      {
          $this->$I_debut =  $debut;
      }
+     
+         public function changefin($fin)
+     {
+         $this->$I_fin =  $fin;
+     }
+     
+     //mes getter pour retourner les $I_debut et $I_fin
+         public function donnrDebut($debut)
+     {
+         return $this->I_debut;
+     }
+     
+         public function donneFin($fin)
+     {
+         return $this->I_fin;
+     }
+     
     public function lister ($I_debut = null, $I_fin = null)
     {
     
