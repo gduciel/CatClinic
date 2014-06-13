@@ -28,6 +28,7 @@ class ListeurUtilisateur extends Listeur implements ListeurInterface
     public function recupererCible () 
     {
         return $this-> _S_nomTable;
+        // recupere la table TABLE_USER
     }     
      
     public function lister ($I_debut = null, $I_fin = null)
