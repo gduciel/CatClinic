@@ -33,7 +33,7 @@ class ListeurUtilisateur extends Listeur implements ListeurInterface
     public function lister ($I_debut = null, $I_fin = null)
     {
         $S_requete = 'SELECT count(*) AS nb FROM ' .  $this -> recupererCible();
-        // cette requete va retourné le nombre d'element de la table TABLE_USER
+        // cette requete va retourner le nombre d'element de la table TABLE_USER
 
     }
     
