@@ -136,4 +136,26 @@ final class UtilisateurMapper extends CorrespondanceTable implements Corresponda
     {
         // à implémenter
     }
+
+    public function Liste($I_debut,$I_fin)
+    {
+        //dans une variable STRING je stoque ma requete 
+		// Elle selectionne les valeurs des id login et admin de la table stocké dans _S_monTable
+		//_S_monTable vaut TABLE_USER
+		$S_requete ='SELECT id, login, admin from'.$this->_S_monTable.' limit ?,?';
+		
+		//le but de connexion::PARAM_ENTIER est de forcer $I_debut a Integer pour la fonction prepare de PDO 
+		// la classe connexion
+		// donc le tableau $A_Param contient deux valeurs de tableau ou l'on est sur d'avoir des integers 
+		$A_ParamDebut=Array($I_debut,connexion::PARAM_ENTIER);
+		$A_Paramfin=Array($I_fin,connexion::PARAM_ENTIER);
+		$A_Param=Array($A_ParamDebut,$A_Paramfin);
+		
+		$A_enregistrement = $this->_O_connexion->projeter($S_requete,$A_Param);
+		//foreach...
+		//return tableau propore
+    }
+
+
+
 }
