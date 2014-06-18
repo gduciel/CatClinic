@@ -151,11 +151,12 @@ final class UtilisateurMapper extends CorrespondanceTable implements Corresponda
 		$A_Paramfin=Array($I_fin,connexion::PARAM_ENTIER);
 		$A_Param=Array($A_ParamDebut,$A_Paramfin);
 		
-		$A_enregistrement = $this->_O_connexion->projeter($S_requete,$A_Param);
+		$A_enregistrements = $this->_O_connexion->projeter($S_requete,$A_Param);
 		//foreach...
 		//return tableau propre
-		foreach ($A_enregistrement as $I_id ){
-			$id
+		foreach ($A_enregistrements as $A_enregistrement){
+			
+			
 			
 			
 		}
