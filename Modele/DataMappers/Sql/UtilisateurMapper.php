@@ -162,11 +162,11 @@ final class UtilisateurMapper extends CorrespondanceTable implements Corresponda
                 	$O_utilisateur->changeAdmin($A_enregistrement->admin);
             // on renvoi un Object utilisateur contant tout la liste de utilisateur de la requete $S_requete
             	return $O_utilisateur;   
+		}	
 			
 			
 			
-			
-		}
+		
     }
 
 
