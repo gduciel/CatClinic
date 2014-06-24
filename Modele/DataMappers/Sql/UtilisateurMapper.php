@@ -155,6 +155,13 @@ final class UtilisateurMapper extends CorrespondanceTable implements Corresponda
 		//foreach...
 		//return tableau propre
 		foreach ($A_enregistrements as $A_enregistrement){
+		/ou $A_enregistrement est un tableau temporaire
+                	$O_utilisateur = new $this->_S_classeMappee;
+                	$O_utilisateur->changeIdentifiant($A_enregistrement->id);
+                	$O_utilisateur->changeLogin($A_enregistrement->login);
+                	$O_utilisateur->changeAdmin($A_enregistrement->admin);
+            // on renvoi un Object utilisateur contant tout la liste de utilisateur de la requete $S_requete
+            	return $O_utilisateur;   
 			
 			
 			
